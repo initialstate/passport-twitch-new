@@ -46,7 +46,9 @@ class Strategy extends OAuth2Strategy {
         options = options || {}
         options.authorizationURL = options.authorizationURL || "https://id.twitch.tv/oauth2/authorize"
         options.tokenURL = options.tokenURL || "https://id.twitch.tv/oauth2/token"
-        
+        options.customHeaders = options.customHeaders || {}
+        options.customHeaders['Client-ID'] = options.clientID
+
         super(options, verify)
 
         this.name = "twitch"
@@ -55,7 +57,7 @@ class Strategy extends OAuth2Strategy {
         this._oauth2.setAuthMethod("Bearer")
         this._oauth2.useAuthorizationHeaderforGET(true)
     }
-    
+
     /**
      * Retrieve user profile from Twitch.
      *
@@ -70,10 +72,10 @@ class Strategy extends OAuth2Strategy {
      * @param {Function} done
      * @api protected
      */
-    userProfile(token, done) {
-        this._oauth2.get("https://api.twitch.tv/helix/users", token, function (err, body, res) {
+    userProfile(accessToken, done) {
+        this._oauth2.get("https://api.twitch.tv/helix/users", accessToken, function (err, body, res) {
             if (err) { return done(new InternalOAuthError("failed to fetch user profile", err)); }
-    
+
             try {
                 done(null, {
                     ...JSON.parse(body).data[0],
