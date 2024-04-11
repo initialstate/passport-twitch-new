@@ -13,7 +13,7 @@ unobtrusively integrated into any application or framework that supports
 
 ## Install
 ```bash
-$ npm install passport-twitch-new
+$ npm install initialstate/passport-twitch-new
 ```
 ## Usage of OAuth 2.0
 
